@@ -1,4 +1,7 @@
 var express = require('express');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
@@ -20,23 +23,46 @@ knex.migrate.latest({
     .catch((err) => console.error('Error migrating database:', err));
 
 
-var storeMessage = function (name, data) {
-    messages.push({name: name, data: data});
-    if (messages.length > prevChats) {
-        messages.shift();
-    }
-};
+const secretKey = crypto.randomBytes(32).toString('hex');
 
-//Setup the app with Express
+
+app.use(bodyParser.json());
+//Set up the app with Express
 app.use(express.static(__dirname + '/public'));
+
+// Authentication endpoint
+app.post('/login', (req, res) => {
+    const {username, password} = req.body;
+    knex
+        .select('*')
+        .from('users')
+        .where('username', username)
+        .andWhere('password', password)
+        .then(users => {
+            if (users.length > 0) {
+                console.log('User found:', username);
+                const user = {username};
+                const token = jwt.sign(user, secretKey, {expiresIn: '1h'});
+                res.status(200).json({token});
+            } else {
+                console.log('User not found:', username);
+                res.status(401).json({error: 'Authentication failed. Invalid username or password.'});
+            }
+        })
+        .catch(error => {
+            console.error('Error selecting user:', username, error);
+            res.status(500).json({error: 'Internal server error.'});
+        })
+});
 
 //Socket.io
 io.on('connection', function (socket) {
 
     //Log activity
-    socket.on('join', function (name, password) {
+    socket.on('login', function (name, password) {
         socket.userName = name;
         socket.password = password;
+
         socket.broadcast.emit('chat', name + password + ' has joined the chat');
         console.log(name + ' has joined the chat');
 
