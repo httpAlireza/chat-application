@@ -69,6 +69,13 @@
                 }),
             })
                 .then(response => response.json())
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Authentication failed. Invalid username or password.');
+                    }
+                })
                 .then(data => {
                     console.log('Server response:', data);
 
@@ -97,7 +104,7 @@
 
             // Form submit
             $('#chat-form').submit(function () {
-                socket.emit('chat',userName, $('#message').val());
+                socket.emit('chat', userName, $('#message').val());
                 $('#message').val('');
                 return false;
             });

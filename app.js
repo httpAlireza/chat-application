@@ -42,7 +42,7 @@ app.post('/login', (req, res) => {
             if (users.length > 0) {
                 console.log('User found:', username);
                 const user = {username};
-                const token = jwt.sign(user, secretKey, {expiresIn: '1h'});
+                const token = jwt.sign(user, secretKey, {expiresIn: '5m'});
                 res.status(200).json({token});
             } else {
                 console.log('User not found:', username);
