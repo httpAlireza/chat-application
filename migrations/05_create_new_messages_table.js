@@ -1,7 +1,7 @@
 exports.up = function (knex) {
-    return knex.schema.table('messages', function (table) {
-        table.increments('id');
-        table.integer('session_id').unsigned();
+    return knex.schema.createTable('messages', function (table) {
+        table.increments('id').primary();
+        table.integer('session_id').unsigned().notNullable();
         table.foreign('session_id').references('sessions.id');
     });
 };
