@@ -2,37 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Chat</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<div class="container header">
-    <div class="header">
+<div id="app-container" class="container">
+    <!-- Login Container -->
+    <div id="login-container">
+        <h1>Login</h1>
+        <form id="login-form">
+            <label for="username">Enter your username:</label>
+            <input type="text" id="username" required>
+            <label for="password">Enter your password:</label>
+            <input type="password" id="password" required>
+            <button type="submit" class="btn btn-info">Join Chat</button>
+        </form>
+    </div>
+
+    <!-- Chat Container (initially hidden) -->
+    <div id="chat-container" style="display: none;">
         <div class="col-md-12">
-            <h1>Chat App</h1>
+            <ul id="chat-body" class="list-unstyled"></ul>
+            <form id="chat-form" class="chat-bar-fixed">
+                <div class="input-group input-group-lg">
+                    <label for="message"></label><input id="message" type="text" class="form-control" placeholder=" "
+                                                        aria-describedby="sizing-addon1" autocomplete="off">
+                    <span class="input-group-btn">
+              <button class="btn btn-info" type="submit">Send!</button>
+            </span>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-<div class="container">
-    <div class="col-md-12">
-        <ul class="list-unstyled" id="chat-body"></ul>
-        <form class="chat-bar-fixed">
-            <div class="input-group input-group-lg">
-                <input aria-describedby="sizing-addon1" autocomplete="off" class="form-control" id="message" placeholder=" "
-                       type="text">
-                <span class="input-group-btn">
-            <button class="btn btn-info" type="submit">Send!</button>
-          </span>
-            </div>
-        </form>
-    </div>
-</div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 <script src="/client.js"></script>
+
 </body>
 </html>
