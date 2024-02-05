@@ -1,0 +1,11 @@
+{
+  "name": "chat",
+  "version": "0.0.1",
+  "description": "a simple socket.io chat app",
+  "dependencies": {
+    "express": "^4.10.2",
+    "knex": "^3.1.0",
+    "mysql2": "^3.9.1",
+    "socket.io": "^1.4.5"
+  }
+}
