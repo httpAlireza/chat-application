@@ -74,11 +74,11 @@ io.on('connection', function (socket) {
     });
 
     //Log chats
-    socket.on('chat', function (message) {
-        io.emit('chat', socket.userName + ': ' + message);
+    socket.on('chat', function (userName,message) {
+        io.emit('chat', userName + ': ' + message);
 
         // Save the message to the database
-        knex('messages').insert({name: socket.userName, data: message})
+        knex('messages').insert({name: userName, data: message})
             .then(() => console.log('Message saved to database'))
             .catch((err) => console.error('Error saving message to database:', err));
     });

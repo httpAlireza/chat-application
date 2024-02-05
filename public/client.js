@@ -97,7 +97,7 @@
 
             // Form submit
             $('#chat-form').submit(function () {
-                socket.emit('chat', $('#message').val());
+                socket.emit('chat',userName, $('#message').val());
                 $('#message').val('');
                 return false;
             });
