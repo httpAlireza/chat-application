@@ -34,9 +34,10 @@ app.use(express.static(__dirname + '/public'));
 io.on('connection', function (socket) {
 
     //Log activity
-    socket.on('join', function (name) {
+    socket.on('join', function (name, password) {
         socket.userName = name;
-        socket.broadcast.emit('chat', name + ' has joined the chat');
+        socket.password = password;
+        socket.broadcast.emit('chat', name + password + ' has joined the chat');
         console.log(name + ' has joined the chat');
 
         //Log who has left
