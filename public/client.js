@@ -103,7 +103,7 @@
 
                     const token = data.token;
 
-                    // Cookies.set('token', token);
+                    Cookies.set('token', token);
 
                     fetchChatList(username);
                 })
@@ -136,7 +136,7 @@
 
                     const token = data.token;
 
-                    // Cookies.set('token', token);
+                    Cookies.set('token', token);
 
                     fetchChatList(username);
                 })
