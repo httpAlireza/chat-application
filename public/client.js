@@ -12,7 +12,7 @@
                 alert('Your session has expired. Please log in again.');
             } else {
                 userName = decodedToken.username;
-                joinChat();
+                fetchChatList(userName);
             }
         } else {
             $('#login-container').show();
@@ -88,7 +88,7 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    username: username,
+                    username: username.toLowerCase(),
                     password: password,
                 }),
             })
@@ -105,7 +105,7 @@
 
                     // Cookies.set('token', token);
 
-                    joinChat();
+                    fetchChatList(username);
                 })
                 .catch(error => {
                     console.error('Error in log in:', error.message);
@@ -120,7 +120,7 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    username: username,
+                    username: username.toLowerCase(),
                     nickname: nickname,
                     password: password
                 }),
@@ -138,7 +138,7 @@
 
                     // Cookies.set('token', token);
 
-                    joinChat();
+                    fetchChatList(username);
                 })
                 .catch(error => {
                     console.error('Error in sign up:', error);
@@ -178,5 +178,90 @@
                 });
             });
         }
+
+        function fetchChatList(username) {
+            // Fetch chat list from the server
+            fetch('/chat_list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userName: username,
+                }),
+            })
+                .then(response => {
+                    console.log(response);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch chat list.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    let chatList = data.chatList;
+                    displayChats(chatList);
+                })
+                .catch(error => {
+                    console.error('Error fetching chat list:', error.message);
+                    alert('Failed to fetch chat list. Please try again.');
+                });
+        }
+
+        function displayChats(chats) {
+            // Hide chat buttons and show chat bar
+            $('.chat-column').hide();
+            $('#chat-form').show();
+
+            // Display chats row by row
+            chats.forEach(chat => {
+                $('#chat-body').append($('<li>').text(chat.sender + ': ' + chat.data));
+                $('html, body').animate({
+                    scrollTop: $(document).height()
+                });
+            });
+        }
+
+        // Event listener for chat button click
+        $(document).on('click', '.chat-column', function () {
+            const sessionId = $(this).data('session-id');
+            currentSessionId = sessionId;
+            console.log('Clicked on chat button with sessionId:', sessionId);
+            fetchChats(sessionId);
+        });
+
+        // Form submit
+        $('#chat-form').submit(function () {
+            // Use currentSessionId to send messages or handle other chat interactions
+            socket.emit('chat', userName, $('#message').val());
+            $('#message').val('');
+            return false;
+        });
+
+        function fetchChats(sessionId) {
+            fetch('/fetch_chats', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    session_id: sessionId,
+                }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch chats.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    let chats = data.chats;
+                    displayChats(chats);
+                })
+                .catch(error => {
+                    console.error('Error fetching chats:', error.message);
+                    alert('Failed to fetch chats. Please try again.');
+                });
+        }
+
     });
 })(jQuery);

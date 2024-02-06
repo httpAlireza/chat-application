@@ -32,24 +32,28 @@
             <label for="signup-nickname" class="sr-only">Enter your nickname:</label>
             <input type="text" id="signup-nickname" class="form-control mb-3" placeholder="Nickname" required autofocus>
             <label for="signup-password" class="sr-only">Enter your password:</label>
-            <input type="password" id="signup-password" class="form-control mb-3" placeholder="Password" required autofocus>
+            <input type="password" id="signup-password" class="form-control mb-3" placeholder="Password" required
+                   autofocus>
             <label for="signup-retryPassword" class="sr-only">Enter your password:</label>
-            <input type="password" id="signup-retryPassword" class="form-control mb-3" placeholder="Retry Password" required autofocus>
+            <input type="password" id="signup-retryPassword" class="form-control mb-3" placeholder="Retry Password"
+                   required autofocus>
             <button type="submit" class="btn btn-lg btn-info btn-block">Sign Up</button>
         </form>
     </div>
 
     <!-- Chat Container (initially hidden) -->
+
     <div id="chat-container" style="display: none;">
         <div class="col-md-12">
-            <ul id="chat-body" class="list-unstyled"></ul>
-            <form id="chat-form" class="chat-bar-fixed">
+            <h2 class="text-center">Select your chat</h2>
+            <div id="chat-body" class="list-unstyled chat-buttons"></div>
+            <form id="chat-form" class="chat-bar-fixed" style="display: none;">
                 <div class="input-group input-group-lg">
                     <label for="message"></label><input id="message" type="text" class="form-control" placeholder=" "
                                                         aria-describedby="sizing-addon1" autocomplete="off">
                     <span class="input-group-btn">
-              <button class="btn btn-info" type="submit">Send!</button>
-            </span>
+                        <button class="btn btn-info" type="submit">Send!</button>
+                    </span>
                 </div>
             </form>
         </div>

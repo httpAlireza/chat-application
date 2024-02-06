@@ -4,6 +4,7 @@ exports.up = function (knex) {
         table.string('sender_username').notNullable().references('users.username');
         table.integer('session_id').unsigned().notNullable().references('sessions.id');
         table.string('data').notNullable();
+        table.timestamps(true, true);
     });
 };
 

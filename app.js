@@ -58,15 +58,95 @@ app.post('/login', (req, res) => {
 app.post('/signup', (req, res) => {
     const {username, nickname, password} = req.body;
 
-    knex('users').insert({username: username, nickname: nickname, password: password})
-        .then(() => {
-            console.log('User created:', username);
-            const user = {username};
-            const token = jwt.sign(user, secretKey, {expiresIn: '5m'});
-            res.status(201).json({token});
+    knex
+        .select('*')
+        .from('users')
+        .where('username', username)
+        .then(users => {
+            if (users.length > 0) {
+                res.status(409).json({error: 'Username is already taken.'});
+            } else {
+                knex('users').insert({username: username, nickname: nickname, password: password})
+                    .then(() => {
+                        console.log('User created:', username);
+                        const user = {username};
+                        const token = jwt.sign(user, secretKey, {expiresIn: '1h'});
+                        res.status(201).json({token});
+                    })
+                    .catch(error => {
+                        console.error('Error inserting user:', username, error);
+                        res.status(500).json({error: 'Internal server error.'});
+                    })
+            }
         })
         .catch(error => {
-            console.error('Error inserting user:', username, error);
+            console.error('Error selecting user:', username, error);
+            res.status(500).json({error: 'Internal server error.'});
+        })
+
+});
+
+app.post('/chat_list', (req, res) => {
+    const {userName} = req.body;
+    knex
+        .select('*')
+        .from('sessions')
+        .where('username1', userName)
+        .orWhere('username2', userName)
+        .then(result => {
+            console.log(result);
+            let response = [];
+            result.forEach(function (item) {
+                const sessionId = item.id;
+                let targetUsername;
+                if (userName === item.username1) {
+                    targetUsername = item.username2;
+                } else {
+                    targetUsername = item.username1;
+                }
+                response.push({sessionId, targetUsername});
+            });
+            console.log(response);
+            res.status(200).json({chatList: response});
+        }).catch(error => {
+        console.error('Error finding chats for user:', userName, error);
+        res.status(500).json({error: 'Something went wrong.'});
+    })
+});
+
+app.post('/fetch_chats', (req, res) => {
+    const {session_id} = req.body;
+    knex
+        .select('messages.data as data', 'messages.sender as sender')
+        .from('sessions')
+        .join('messages', 'sessions.id', '=', 'messages.session_id')
+        .where('session_id',session_id)
+        .orderBy('messages.created_at', 'asc') // Order by a specific column in ascending order
+        .then(result => {
+            console.log(result);
+            let response = [];
+            result.forEach(function (item) {
+                const sender = item.sender;
+                const data = item.data;
+            });
+            console.log(response);
+            res.status(200).json({chats: response});
+        }).catch(error => {
+        console.error('Error finding chats for session:', session_id, error);
+        res.status(500).json({error: 'Something went wrong.'});
+    })
+});
+
+app.post('/add_session', (req, res) => {
+    const {username1,username2} = req.body;
+
+    knex('sessions').insert({username1: username1, username2:username2})
+        .then(() => {
+            console.log('sesion for users created:', username1, username2);
+            res.status(201).json({});
+        })
+        .catch(error => {
+            console.error('Error inserting user:', username1, username2, error);
             res.status(500).json({error: 'Internal server error.'});
         })
 });

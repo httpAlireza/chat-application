@@ -8,7 +8,6 @@ body {
 
 li {
     padding: 5px;
-    /*padding-bottom: 5px;*/
 }
 
 li:nth-child(odd) {
@@ -37,7 +36,7 @@ form {
     bottom: 0;
 }
 
-/* Additional styles for login page */
+
 #login-container {
     max-width: 400px;
     margin: 0 auto;
@@ -52,7 +51,7 @@ form {
 }
 
 .login-form label {
-    display: none; /* Hide labels visually but keep them accessible */
+    display: none;
 }
 
 .login-form input {
@@ -84,7 +83,7 @@ form {
 }
 
 .signup-form label {
-    display: none; /* Hide labels visually but keep them accessible */
+    display: none;
 }
 
 .signup-form input {
@@ -102,4 +101,20 @@ form {
     align-items: center;
     justify-content: center;
     height: 100vh;
+}
+
+.chat-column {
+    display: inline-block;
+    padding: 10px;
+    margin: 10px;
+    min-width: 200px;
+    background-color: #3498db;
+    color: #fff;
+    border: 1px solid #2980b9;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chat-column:hover {
+    background-color: #2980b9;
 }
