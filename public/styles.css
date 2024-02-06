@@ -1,74 +1,105 @@
 body {
-  padding-top: 30px;
-  padding-bottom: 80px;
-  font-size: 20px;
-  font-weight: 300;
+    padding-top: 30px;
+    padding-bottom: 80px;
+    font-size: 20px;
+    font-weight: 300;
 }
 
 
 li {
-  padding: 5px;
-  /*padding-bottom: 5px;*/
+    padding: 5px;
+    /*padding-bottom: 5px;*/
 }
 
 li:nth-child(odd) {
-  background: rgba(38, 154, 188, 0.1);
-  border-radius: 4px;
+    background: rgba(38, 154, 188, 0.1);
+    border-radius: 4px;
 }
 
 #chat-body {
-  overflow-y: auto;
+    overflow-y: auto;
 }
 
 form {
-  background: #fff;
+    background: #fff;
 }
 
 .chat-bar-fixed {
-  max-width: 1170px;
-  margin: auto;
-  padding-top: 20px;
-  padding-right: 15px;
-  padding-bottom: 20px;
-  padding-left: 15px;
-  position: fixed;
-  right:0;
-  left:0;
-  bottom: 0;
+    max-width: 1170px;
+    margin: auto;
+    padding-top: 20px;
+    padding-right: 15px;
+    padding-bottom: 20px;
+    padding-left: 15px;
+    position: fixed;
+    right: 0;
+    left: 0;
+    bottom: 0;
 }
 
 /* Additional styles for login page */
 #login-container {
-  max-width: 400px;
-  margin: 0 auto;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
-.form-signin {
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.login-form {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.form-signin label {
-  display: none; /* Hide labels visually but keep them accessible */
+.login-form label {
+    display: none; /* Hide labels visually but keep them accessible */
 }
 
-.form-signin input {
-  font-size: 16px;
-  margin-bottom: 15px;
+.login-form input {
+    font-size: 16px;
+    margin-bottom: 15px;
 }
 
-.form-signin button {
-  font-size: 18px;
+.login-form button {
+    font-size: 18px;
+}
+
+#signup-container {
+    display: none;
+    max-width: 400px;
+    min-width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 30px auto 0;
+}
+
+.signup-form {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.signup-form label {
+    display: none; /* Hide labels visually but keep them accessible */
+}
+
+.signup-form input {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.signup-form button {
+    font-size: 18px;
 }
 
 /* Center the login container */
 #app-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 }
-

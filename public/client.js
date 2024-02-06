@@ -1,13 +1,14 @@
 (function ($) {
     $(function () {
-        var socket = io();
-        var userName;
+        const socket = io();
+        let userName;
 
         const token = Cookies.get('token');
 
         if (token) {
             const decodedToken = parseJwt(token);
             if (decodedToken.expired) {
+                Cookies.remove('token');
                 alert('Your session has expired. Please log in again.');
             } else {
                 userName = decodedToken.username;
@@ -25,6 +26,29 @@
                     authenticateUser(username, password);
                 } else {
                     alert('Please enter both username and password.');
+                }
+            });
+
+            $('#show-signup').on('click', function () {
+                $('#login-container').toggle();
+                $('#signup-container').toggle();
+            });
+
+            $('#signup-form').submit(function (event) {
+                event.preventDefault();
+                const username = $('#signup-username').val().trim();
+                const nickname = $('#signup-nickname').val().trim();
+                const password = $('#signup-password').val().trim();
+                const retryPassword = $('#signup-retryPassword').val().trim();
+
+                if (username && nickname && password && retryPassword) {
+                    if (password !== retryPassword) {
+                        alert('Passwords do not match.');
+                    } else {
+                        signupUser(username, nickname, password);
+                    }
+                } else {
+                    alert('Please enter all the fields.');
                 }
             });
         }
@@ -68,35 +92,64 @@
                     password: password,
                 }),
             })
-                .then(response => response.json())
                 .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
+                    if (!response.ok) {
                         throw new Error('Authentication failed. Invalid username or password.');
                     }
+                    return response.json();
                 })
                 .then(data => {
-                    console.log('Server response:', data);
+                    console.log('Server response for log in:', data);
 
-                    // Assuming the server responds with a JWT upon successful authentication
                     const token = data.token;
 
-                    // Save token to cookies
-                    Cookies.set('token', token);
+                    // Cookies.set('token', token);
 
-                    // Join the chat or perform any other actions
                     joinChat();
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error('Error in log in:', error.message);
                     alert('Authentication failed. Please check your username and password.');
+                });
+        }
+
+        function signupUser(username, nickname, password) {
+            fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    nickname: nickname,
+                    password: password
+                }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Sign up failed. Try again later.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server response for sign up:', data);
+
+                    const token = data.token;
+
+                    // Cookies.set('token', token);
+
+                    joinChat();
+                })
+                .catch(error => {
+                    console.error('Error in sign up:', error);
+                    alert('Signup failed. Please try again.');
                 });
         }
 
         function joinChat() {
             // Hide login form, show chat container
             $('#login-container').hide();
+            $('#signup-container').hide();
             $('#chat-container').show();
 
             // Emit the 'join' event to the server with the username

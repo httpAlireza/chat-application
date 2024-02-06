@@ -55,7 +55,22 @@ app.post('/login', (req, res) => {
         })
 });
 
-//Socket.io
+app.post('/signup', (req, res) => {
+    const {username, nickname, password} = req.body;
+
+    knex('users').insert({username: username, nickname: nickname, password: password})
+        .then(() => {
+            console.log('User created:', username);
+            const user = {username};
+            const token = jwt.sign(user, secretKey, {expiresIn: '5m'});
+            res.status(201).json({token});
+        })
+        .catch(error => {
+            console.error('Error inserting user:', username, error);
+            res.status(500).json({error: 'Internal server error.'});
+        })
+});
+
 io.on('connection', function (socket) {
 
     //Log activity
@@ -74,7 +89,7 @@ io.on('connection', function (socket) {
     });
 
     //Log chats
-    socket.on('chat', function (userName,message) {
+    socket.on('chat', function (userName, message) {
         io.emit('chat', userName + ': ' + message);
 
         // Save the message to the database
